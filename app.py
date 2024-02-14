@@ -60,10 +60,12 @@ def start():
 
     #todo_liste_elemente = []
     #todo_liste_elemente = request.args.get("todo_liste_elemente")
-    for element in todo_liste_elemente:
-        print(f"Todolisteelement: {element}")
+
 
     print(f"TodobereichId: {todo_bereich_id}")
+
+
+
 
     add_todo_task_form = AddTodoTaskForm()
     add_todo_area_form = AddTodoAreaForm()
@@ -103,6 +105,9 @@ def start():
         todo_bereiche.append(new_area)
         return redirect(url_for("start", todo_bereiche=todo_bereiche, todo_liste = todo_liste))
 
+    for element in todo_liste_elemente:
+        print(f"Todolisteelement: {element}")
+
     return render_template("start.html", add_todo_task_form = add_todo_task_form,
                            todo_liste = todo_liste, add_todo_area_form = add_todo_area_form,
                            todo_bereiche=todo_bereiche, todo_bereiche_query=todo_bereiche_query, todo_liste_elemente = todo_liste_elemente, todo_bereich_name = todo_bereich_name)
@@ -117,18 +122,19 @@ def start():
 def todo_einsehen(todo_bereich_id):
     global todo_liste_elemente
 
-    todo_bereich_name = request.args.get('todo_bereich_name')
+    todo_bereich_name = request.args.get('bereich_name')
 
     #print((f"TodobereichId: {todo_bereich_id}"))
 
     todo_bereich = TodoBereich.query.get(todo_bereich_id)
+
     print(f" TodoBereichName = {todo_bereich.todo_bereich_name}")
 
     todo_liste_für_id = TodoListeElement.query.filter_by(todo_bereich_id=todo_bereich.id).all()
     todo_liste_elemente = [element.aufgabe for element in todo_liste_für_id]
 
-    for element in todo_liste_für_id:
-        print(f"TodoListeFürId: {element}")
+    #for element in todo_liste_für_id:
+        #print(f"TodoListeFürId: {element}")
 
 
 
@@ -137,7 +143,7 @@ def todo_einsehen(todo_bereich_id):
     #for listenelement in todo_liste_laden:
         #print(listenelement.aufgabe)
 
-    return redirect(url_for("start", todo_liste_elemente=todo_liste_elemente, todo_bereich_id=todo_bereich.id, todo_bereich_name = todo_bereich.todo_bereich_name))
+    return redirect(url_for("start", todo_bereich_id=todo_bereich.id, todo_bereich_name = todo_bereich.todo_bereich_name))
 
     #return render_template("todo_einsehen.html", todo_liste_elemente = todo_liste_elemente)
 
