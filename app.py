@@ -71,29 +71,32 @@ def start():
     add_todo_area_form = AddTodoAreaForm()
     #Todo Element
     #if add_todo_task_form.validate_on_submit():
-    if request.method == 'POST':
-        new_todo = add_todo_task_form.new_todo.data
+    """if request.method == 'POST' and add_todo_task_form.validate_on_submit():
+            new_todo = add_todo_task_form.new_todo.data
+    
+            todo_task = TodoListeElement(
+                aufgabe=new_todo,
+                todo_bereich_id = todo_bereich_id
+                #Wird geändert
+    
+            )
+            db.session.add(todo_task)
+            db.session.commit()
+    
+    
+            #todo_liste.append(new_todo)
+            todo_liste_elemente.append(new_todo)
+            print(todo_liste_elemente)
+            return redirect(url_for("start", todo_bereiche=todo_bereiche, todo_liste_elemente = todo_liste_elemente))"""
 
-        todo_task = TodoListeElement(
-            aufgabe=new_todo,
-            todo_bereich_id = todo_bereich_id
-            #Wird geändert
-
-        )
-        db.session.add(todo_task)
-        db.session.commit()
-
-
-        todo_liste.append(new_todo)
-        todo_liste_elemente.append(new_todo)
-        print(todo_liste_elemente)
-        return redirect(url_for("start", todo_bereiche=todo_bereiche, todo_liste_elemente = todo_liste_elemente))
 
     #Todo Bereich
     #if add_todo_area_form.validate_on_submit():
-    if request.method == "POST":
+    if request.method == "POST" :
 
         new_area = add_todo_area_form.new_area.data
+
+        print(f"New Area: {new_area}")
 
         todo_area = TodoBereich(
             todo_bereich_name=new_area
@@ -101,12 +104,12 @@ def start():
         db.session.add(todo_area)
         db.session.commit()
 
+        #todo_bereiche.append(new_area)
+        todo_bereiche_query = TodoBereich.query.all()
 
-        todo_bereiche.append(new_area)
-        return redirect(url_for("start", todo_bereiche=todo_bereiche, todo_liste = todo_liste))
+        return redirect(url_for("start", todo_bereiche_query=todo_bereiche_query))
 
-    for element in todo_liste_elemente:
-        print(f"Todolisteelement: {element}")
+
 
     return render_template("start.html", add_todo_task_form = add_todo_task_form,
                            todo_liste = todo_liste, add_todo_area_form = add_todo_area_form,
@@ -140,19 +143,20 @@ def todo_einsehen(todo_bereich_id):
 
 #todo_liste_laden = TodoListeElement.query.filter_by(todo_bereich_id = todo_bereich_id).all()
 #print(todo_liste_laden)
-    #for listenelement in todo_liste_laden:
-        #print(listenelement.aufgabe)
+
+    for element in todo_liste_für_id:
+        print(element)
 
     return redirect(url_for("start", todo_bereich_id=todo_bereich.id, todo_bereich_name = todo_bereich.todo_bereich_name))
 
     #return render_template("todo_einsehen.html", todo_liste_elemente = todo_liste_elemente)
 
-"""@app.route("/todo-erledigt/<int:todo_id>", methods=["GET", "POST"])
+@app.route("/todo-erledigt/<int:todo_id>", methods=["GET", "POST"])
 def todo_erledigt(todo_id):
     #todo_id = request.args.get("todo_id")
     #print(f"Todoid = {todo_id}")
 
-    return redirect(url_for("start"))"""
+    return redirect(url_for("start"))
 
 @app.route("/dropdown-button")
 def dropdown_button():
