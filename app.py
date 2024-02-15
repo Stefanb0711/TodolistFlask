@@ -160,10 +160,23 @@ def todo_erledigt(todo_id):
 
 @app.route("/dropdown-button")
 def dropdown_button():
-    form = AddTodoAreaForm()
-    task_form = AddTodoTaskForm()
+    todo_bereiche_query = TodoBereich.query.all()
 
-    return render_template("todo_einsehen.html", form = form, add_todo_area_form = form, task_form = task_form, todo_liste_elemente = todo_liste_elemente)
+    #icon_url = "Bilder/stars.svg"
+
+    icon_url = request.args.get("icon_url")
+
+    if icon_url is None:
+        icon_url = "Bilder/stars.svg"
+
+
+    print(f"{icon_url}")
+
+    #if icon_url is N
+
+    return render_template("todo_einsehen.html", todo_bereiche = todo_bereiche_query, icon_url = icon_url)
+
+
 
 if __name__ == '__main__':
     app.run(debug =True, port=5001)
