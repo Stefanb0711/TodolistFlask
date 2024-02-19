@@ -53,7 +53,7 @@ def start():
     icon_url = request.args.get('icon_url')
 
     if icon_url is None:
-        icon_url = "Bilder/clipboard2.svg"
+        icon_url = "Bilder/list-task.svg"
 
 
     #for todo_bereich in todo_bereiche_query:
@@ -212,7 +212,7 @@ def dropdown_button():
 
     #if icon_url is N
 
-    return render_template("todo_einsehen.html", todo_bereiche = todo_bereiche_query, icon_url = icon_url, letzter_bereich_id = letzter_bereich_id)
+    return render_template("todo_einsehen.html", todo_bereiche_query = todo_bereiche_query, icon_url = icon_url, letzter_bereich_id = letzter_bereich_id)
 
 
 
@@ -236,6 +236,8 @@ def todo_löschen(todo_id):
     db.session.commit()
 
     return redirect(url_for("todo_einsehen", todo_bereich_id=todo_bereich_id))
+
+#@app.route()
 
 
 if __name__ == '__main__':
