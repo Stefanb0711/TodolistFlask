@@ -23,6 +23,7 @@ class TodoBereich(db.Model):
     __tablename__ = "todo_bereich"
     id = db.Column(db.Integer, primary_key=True)
     todo_bereich_name = db.Column(db.String, nullable=False)
+    todo_bereich_symbol = db.Column(db.String, nullable= False)
     todo_liste_element = db.relationship("TodoListeElement", back_populates="todo_bereich")
 
 class TodoListeElement(db.Model):
@@ -68,11 +69,11 @@ def start():
 
     icon_url = request.args.get('icon_url')
     if icon_url is None:
-        icon_url = "Bilder/list-task.svg"
+        icon_url = 'Bilder/list-task.svg'
 
     bereich_id_geändertes_icon = request.args.get("bereich_id_geändertes_icon")
     if bereich_id_geändertes_icon is None:
-        bereich_id_geändertes_icon = 0
+        bereich_id_geändertes_icon = 1
 
     print(f"Icon Url: {icon_url} und Bereichid: {bereich_id_geändertes_icon}")
 
@@ -134,7 +135,8 @@ def start():
        # print(f"New Area Id: {new_area.id}")
 
         todo_area = TodoBereich(
-            todo_bereich_name=new_area
+            todo_bereich_name=new_area,
+            todo_bereich_symbol= icon_url
         )
         db.session.add(todo_area)
         db.session.commit()
@@ -144,7 +146,7 @@ def start():
         #icon_url = request.args.get("icon_url")
 
         #print(f"New Area TodoBereichId {neuste_todo_area.id}")
-
+        #_query = T
         #todo_bereiche.append(new_area)
         todo_bereiche_query = TodoBereich.query.all()
 
