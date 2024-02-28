@@ -99,7 +99,7 @@ def start():
     add_todo_area_form = AddTodoAreaForm()
     #Todo Element
     #if add_todo_task_form.validate_on_submit():
-    """if request.method == 'POST' and add_todo_task_form.validate_on_submit():
+    if add_todo_task_form.validate_on_submit():
             new_todo = add_todo_task_form.new_todo.data
     
             todo_task = TodoListeElement(
@@ -113,9 +113,9 @@ def start():
     
     
             #todo_liste.append(new_todo)
-            todo_liste_elemente.append(new_todo)
-            print(todo_liste_elemente)
-            return redirect(url_for("start", todo_bereiche=todo_bereiche, todo_liste_elemente = todo_liste_elemente))"""
+            #todo_liste_elemente.append(new_todo)
+            #print(todo_liste_elemente)
+            return redirect(url_for("start", todo_bereich_id = todo_bereich_id))
 
 
     #Todo Bereich
@@ -126,7 +126,7 @@ def start():
         todo_bereiche_query = TodoBereich.query.all()
         if len(todo_bereiche_query) >= 20:
             flash("Sie können kein TodoBereich mehr hinzufügen", "error")
-            return redirect(url_for("start"))
+            return redirect(url_for("dropdown_button"))
 
 
 
@@ -146,7 +146,6 @@ def start():
         #icon_url = request.args.get("icon_url")
 
         #print(f"New Area TodoBereichId {neuste_todo_area.id}")
-        #_query = T
         #todo_bereiche.append(new_area)
         todo_bereiche_query = TodoBereich.query.all()
 
@@ -164,7 +163,8 @@ def start():
     return render_template("start.html", add_todo_task_form = add_todo_task_form,
                            todo_liste = todo_liste, add_todo_area_form = add_todo_area_form,
                            todo_bereiche=todo_bereiche, todo_bereiche_query=todo_bereiche_query, todo_liste_elemente = todo_liste_elemente, todo_bereich_name = todo_bereich_name,
-                           todo_liste_für_id=todo_liste_für_id, icon_url=icon_url, bereich_id_geändertes_icon=bereich_id_geändertes_icon)
+                           todo_liste_für_id=todo_liste_für_id, icon_url=icon_url, bereich_id_geändertes_icon=bereich_id_geändertes_icon,
+                           todo_bereich_id = todo_bereich_id)
 
 
 

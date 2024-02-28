@@ -132,15 +132,19 @@
     <!--
 
 -->
-
-   <!--{{ render_form(add_todo_task_form) }} -->
-
-    <form method="post">
-        {{ add_todo_task_form.new_todo() }}
-        <button type="submit" class="btn btn-primary">
+    <form method="post" action="">
+    {{ add_todo_task_form.hidden_tag() }}
+        <div class="row">
+        <div class="col-md-8">
+            {{ add_todo_task_form.new_todo(class="form-control") }}
+        </div>
+        <div class="col-md-4">
             {{ add_todo_task_form.submit() }}
-        </button>
+        </div>
+    </div>
+
     </form>
+
 
 
 
