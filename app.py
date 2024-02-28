@@ -50,10 +50,10 @@ def start():
     todo_bereiche_query = TodoBereich.query.all()
     neue_todo_area_id = len(todo_bereiche_query)
 
-    icon_url = request.args.get('icon_url')
+    """icon_url = request.args.get('icon_url')
 
-    if icon_url is None:
-        icon_url = "Bilder/list-task.svg"
+    #if icon_url is None:
+        #icon_url = "Bilder/list-task.svg" """
 
 
     #for todo_bereich in todo_bereiche_query:
@@ -66,9 +66,16 @@ def start():
 
     todo_liste_für_id = TodoListeElement.query.filter_by(todo_bereich_id=todo_bereich_id).all()
 
+    icon_url = request.args.get('icon_url')
+    if icon_url is None:
+        icon_url = "Bilder/list-task.svg"
 
+    bereich_id_geändertes_icon = request.args.get("bereich_id_geändertes_icon")
+    if bereich_id_geändertes_icon is None:
+        bereich_id_geändertes_icon = 0
 
-    #todo_liste_für_id = request.args.get("todo_liste_für_id")
+    print(f"Icon Url: {icon_url} und Bereichid: {bereich_id_geändertes_icon}")
+
 
 
     #if request.args.get("todo_liste_für_id") is None:
@@ -134,8 +141,9 @@ def start():
 
         neuste_todo_area = TodoBereich.query.filter_by(todo_bereich_name=new_area).first()
 
+        #icon_url = request.args.get("icon_url")
+
         #print(f"New Area TodoBereichId {neuste_todo_area.id}")
-        print(icon_url)
 
         #todo_bereiche.append(new_area)
         todo_bereiche_query = TodoBereich.query.all()
@@ -148,14 +156,13 @@ def start():
         #neue_todo_area_id += 1
 
         return redirect(url_for("start", todo_bereiche_query=todo_bereiche_query,
-                                neuste_todo_area = neuste_todo_area,neue_todo_area_id = neue_todo_area_id,
-                                icon_url=icon_url))
+                                neuste_todo_area = neuste_todo_area,neue_todo_area_id = neue_todo_area_id))
 
 
     return render_template("start.html", add_todo_task_form = add_todo_task_form,
                            todo_liste = todo_liste, add_todo_area_form = add_todo_area_form,
                            todo_bereiche=todo_bereiche, todo_bereiche_query=todo_bereiche_query, todo_liste_elemente = todo_liste_elemente, todo_bereich_name = todo_bereich_name,
-                           icon_url = icon_url,todo_liste_für_id=todo_liste_für_id)
+                           todo_liste_für_id=todo_liste_für_id, icon_url=icon_url, bereich_id_geändertes_icon=bereich_id_geändertes_icon)
 
 
 
@@ -237,7 +244,16 @@ def todo_löschen(todo_id):
 
     return redirect(url_for("todo_einsehen", todo_bereich_id=todo_bereich_id))
 
-#@app.route()
+@app.route("/bereich-markierung-ändern/<int:bereich_id>")
+def bereich_markierung_ändern(bereich_id):
+
+    print(f"BereichMarkierungÄndern bereichid: {bereich_id}")
+
+    icon_url = request.args.get('icon_url')
+
+    print(icon_url)
+
+    return redirect(url_for("start", bereich_id_geändertes_icon = bereich_id, icon_url = icon_url))
 
 
 if __name__ == '__main__':
