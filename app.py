@@ -30,6 +30,7 @@ class TodoListeElement(db.Model):
     __tablename__ = "todo_liste_element"
     id = db.Column(db.Integer, primary_key=True)
     aufgabe = db.Column(db.String, nullable=False)
+    unerledigt = db.Column(db.Boolean, nullable=False, default = True)
     todo_bereich_id = db.Column(db.Integer, db.ForeignKey("todo_bereich.id"), nullable=False)
     todo_bereich = db.relationship("TodoBereich", back_populates="todo_liste_element")
 
@@ -66,6 +67,17 @@ def start():
     todo_bereich_name = request.args.get("todo_bereich_name")
 
     todo_liste_für_id = TodoListeElement.query.filter_by(todo_bereich_id=todo_bereich_id).all()
+
+    todo_liste_für_id_unerledigt = [todo for todo in todo_liste_für_id if todo.unerledigt]
+
+    todo_liste_für_id_erledigt = [todo for todo in todo_liste_für_id if not todo.unerledigt]
+
+    erledigte_todos = request.args.get("erledigte_todos")
+    if erledigte_todos == None:
+        erledigte_todos = []
+
+    print(f"Erledigte Todos: {todo_liste_für_id_erledigt}")
+
 
     icon_url = request.args.get('icon_url')
     if icon_url is None:
@@ -164,7 +176,8 @@ def start():
                            todo_liste = todo_liste, add_todo_area_form = add_todo_area_form,
                            todo_bereiche=todo_bereiche, todo_bereiche_query=todo_bereiche_query, todo_liste_elemente = todo_liste_elemente, todo_bereich_name = todo_bereich_name,
                            todo_liste_für_id=todo_liste_für_id, icon_url=icon_url, bereich_id_geändertes_icon=bereich_id_geändertes_icon,
-                           todo_bereich_id = todo_bereich_id)
+                           todo_bereich_id = todo_bereich_id, erledigte_todos = erledigte_todos, todo_liste_für_id_erledigt = todo_liste_für_id_erledigt,
+                           todo_liste_für_id_unerledigt = todo_liste_für_id_unerledigt)
 
 
 
@@ -196,10 +209,18 @@ def todo_einsehen(todo_bereich_id):
 
 @app.route("/todo-erledigt/<int:todo_id>", methods=["GET", "POST"])
 def todo_erledigt(todo_id):
-    #todo_id = request.args.get("todo_id")
-    #print(f"Todoid = {todo_id}")
 
-    return redirect(url_for("start"))
+    todo_bereich_id = request.args.get('todo_bereich_id')
+
+    neue_erledigte_todo = db.session.query(TodoListeElement).filter(TodoListeElement.id == todo_id).first()
+    neue_erledigte_todo.unerledigt = False
+    db.session.commit()
+
+    #Erledigte Todos finden
+    erledigte_todos = db.session.query(TodoListeElement).filter(TodoListeElement.todo_bereich_id == todo_bereich_id, TodoListeElement.unerledigt == False).all()
+
+
+    return redirect(url_for("start", erledigte_todos = erledigte_todos))
 
 @app.route("/dropdown-button")
 def dropdown_button():
