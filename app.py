@@ -52,14 +52,15 @@ def start():
     todo_bereiche_query = TodoBereich.query.all()
     neue_todo_area_id = len(todo_bereiche_query)
 
-    """icon_url = request.args.get('icon_url')
-
-    #if icon_url is None:
-        #icon_url = "Bilder/list-task.svg" """
 
 
-    #for todo_bereich in todo_bereiche_query:
-       # print(f"odobereichquery: {todo_bereich.todo_bereich_name}")
+    #Bereich der evtl gelöscht wird
+    todo_id = request.args.get('todo_id')
+
+    if not todo_id == None:
+        neue_erledigte_todo = db.session.query(TodoListeElement).filter(TodoListeElement.id == todo_id).first()
+        neue_erledigte_todo.unerledigt = False
+        db.session.commit()
 
 
     todo_bereich_id = request.args.get("todo_bereich_id")
