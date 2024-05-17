@@ -24,7 +24,7 @@ class TodoBereich(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     todo_bereich_name = db.Column(db.String, nullable=False)
     todo_bereich_symbol = db.Column(db.String, nullable= False)
-    todo_liste_element = db.relationship("TodoListeElement", back_populates="todo_bereich")
+    todo_liste_element = db.relationship("TodoListeElement", back_populates="todo_bereich", cascade='all, delete-orphan')
 
 class TodoListeElement(db.Model):
     __tablename__ = "todo_liste_element"
